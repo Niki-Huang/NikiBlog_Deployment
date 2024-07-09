@@ -1,0 +1,26 @@
+CREATE TABLE `blog_info` (
+  `bid` int NOT NULL AUTO_INCREMENT COMMENT '博文ID',
+  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '标题',
+  `fileName` varchar(31) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '文件名',
+  `type` enum('feature','none') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT 'none',
+  `permission` enum('public','private') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT 'public',
+  `status` enum('draft','published') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT 'draft',
+  `tags` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '标签',
+  `likeCount` int NOT NULL DEFAULT '0',
+  `viewCount` int NOT NULL DEFAULT '0',
+  `createTime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `description` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '描述信息',
+  PRIMARY KEY (`bid`)
+) ENGINE=InnoDB AUTO_INCREMENT=105 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
+
+
+CREATE TABLE `pic_info` (
+  `pid` int NOT NULL AUTO_INCREMENT,
+  `picName` varchar(31) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `isCover` enum('no','yes') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT 'no',
+  `createTime` datetime DEFAULT CURRENT_TIMESTAMP,
+  `bid` int DEFAULT NULL,
+  PRIMARY KEY (`pid`),
+  KEY `bid` (`bid`),
+  CONSTRAINT `pic_info_ibfk_1` FOREIGN KEY (`bid`) REFERENCES `blog_info` (`bid`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=136 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci

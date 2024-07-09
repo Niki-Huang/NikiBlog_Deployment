@@ -1,0 +1,52 @@
+name: myblog
+
+services:
+  frontend:
+    image: niki_blog_frontend
+    container_name: niki_blog_frontend
+    ports:
+      - "80:80"
+    networks:
+      niki_blog_net:
+        ipv4_address: 172.20.0.3
+    restart: always
+
+  backend:
+    image: niki_blog_backend
+    container_name: niki_blog_backend
+    ports:
+      - "4400:4400"
+    volumes:
+      - /app/niki_blog_backend/uploads:/usr/src/app/uploads
+    networks:
+      niki_blog_net:
+        ipv4_address: 172.20.0.4
+    restart: always
+    environment:
+      - DB_HOST=niki_blog_mysql
+      - DB_USER=root
+      - DB_PASSWORD=123456
+      - DB_NAME=wordpress
+
+  database:
+    image: niki_blog_mysql
+    container_name: niki_blog_mysql
+    ports:
+      - "3306:3306"
+    volumes:
+      - /app/niki_blog_mysql/conf:/etc/mysql/conf.d
+      - /app/niki_blog_mysql/data:/var/lib/mysql
+    networks:
+      niki_blog_net:
+        ipv4_address: 172.20.0.5
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=123456
+      - MYSQL_DATABASE=blog_data
+
+networks:
+  niki_blog_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
